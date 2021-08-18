@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/purple_200"
+    tools:context=".TodayWeather">
+
+    <include
+        android:id="@+id/toolbar_1"
+        layout="@layout/toolbar_1"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loginBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/sighnupback"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/toolbar_1"
+        android:layout_centerInParent="true"
+        android:layout_margin="10dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Weather Report"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:textSize="35sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/aladin"/>
+
+                <AutoCompleteTextView
+                    android:id="@+id/cityEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edit_text_shape"
+                    android:layout_marginTop="20dp"
+                    android:padding="10dp"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="20dp"
+                    android:hint="Enter City/State"
+                    android:textColorHint="@color/white"/>
+
+                <Button
+                    android:id="@+id/showResultsButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:onClick="getWeather"
+                    android:backgroundTint="@color/light_blue"
+                    android:layout_marginBottom="40dp"
+                    android:text="Show Results"/>
+
+                <TextView
+                    android:id="@+id/weatherInfoTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:text="Temperature in Centigrade :\nTemperature in Fahrenheight :\n\nLatitude : \nLongitude :"/>
+
+                <TextView
+                    android:id="@+id/mainTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="40dp"
+                    android:fontFamily="@font/aladin"
+                    android:letterSpacing=".3"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/weatherWidgetImageView"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    tools:srcCompat="@tools:sample/avatars"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</RelativeLayout>
