@@ -4,7 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,8 +13,11 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.rahulcodecamp.weatherapp.utility.NetworkChangeListener;
 
 public class MainActivity extends AppCompatActivity {
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener(); // to check internetConnection
+
     TextInputEditText phoneTextInputEditText;
     String phoneNo;
 
@@ -23,20 +27,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         phoneTextInputEditText = findViewById(R.id.phoneTextInputEditText);
 
         db = new DBHelper(this); // SQLITE DB
 
-
-
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // this will remove the statusBar
 
-        Toolbar toolbar = findViewById(R.id.toolbar_1);
+        Toolbar toolbar = findViewById(R.id.toolbar_view);
         toolbar.setTitle("WeatherApp");
         setSupportActionBar(toolbar);
 
     }
+
     public void goToRegBtnClicked(View v){
 
         phoneNo = phoneTextInputEditText.getText().toString().trim();
@@ -53,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loginBtnClicked(View v){
-//        startActivity(new Intent(MainActivity.this, TodayWeather.class));
 
         phoneNo = phoneTextInputEditText.getText().toString().trim();
 
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             Boolean checkPhoneNo = db.checkPhoneNo(phoneNo);
             if (checkPhoneNo == true){
                 Toast.makeText(this, "signedIn successfully", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, TodayWeather.class);
+                Intent intent = new Intent(MainActivity.this, TodayWeatherActivity.class);
                 intent.putExtra("user'sPhoneNo", phoneNo);
                 startActivity(intent);
                 finish();
@@ -73,5 +74,18 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Account not exist/Incorrect phone number", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    protected void onStart() {
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 }

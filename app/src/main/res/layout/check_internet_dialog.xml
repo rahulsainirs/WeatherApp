@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/lightBrownDemo"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="20dp"
+                app:tint="@color/mildBrownDemo"
+                android:src="@drawable/ic_wifi_off"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="OOPS!"
+                android:gravity="center"
+                android:textSize="40sp"
+                android:textStyle="bold"
+                android:textColor="@color/mildBrownDemo"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No Internet Connection"
+                android:textSize="25sp"
+                android:gravity="center"
+                android:textColor="@color/mildBrownDemo"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Please check your connection"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:textColor="@color/mildBrownDemo"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/retryButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="50dp"
+                android:text="Retry"
+                android:textColor="@color/lightBrownDemo"
+                android:background="@drawable/button_shape"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</LinearLayout>

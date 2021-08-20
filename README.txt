@@ -8,10 +8,14 @@ This is an android application which supports minSdkVersion = 21 and targetSdkVe
 1. Attractive, Responsive layouts, custom dialog, custom editTEXT, custom Button, custom Toolbar etc.
 2. Xml Lyouts: MainActivity, RegistrationActivity, activityTodayWeather, ProfileActivity.
 
+~BroadCast Receiver:
+1. Broadcast receiver is used to check the INTERNET CONNECTION is on or not
+
 ~Library/dependency used:
 
-1. 'com.google.android.material:material:1.4.0'
-2. 'com.airbnb.android:lottie:3.7.0'
+1. 'com.google.android.material:material:1.4.0'    //for material ui
+2. 'com.airbnb.android:lottie:3.7.0'       	  //for animations
+3. 'com.github.ybq:Android-SpinKit:1.4.0'  	 //for modern progress bars
 
 ~DataBase used:
 

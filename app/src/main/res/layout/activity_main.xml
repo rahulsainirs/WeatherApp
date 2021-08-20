@@ -8,8 +8,8 @@
     tools:context=".MainActivity">
 
     <include
-        android:id="@+id/toolbar_1"
-        layout="@layout/toolbar_1"/>
+        android:id="@+id/toolbar_view"
+        layout="@layout/toolbar_view"/>
 
     <com.airbnb.lottie.LottieAnimationView
     android:id="@+id/signupBackground"
@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
         android:layout_margin="10dp">
 
         <ScrollView
@@ -68,7 +69,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/phoneTextInputEditText"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="wrap_content"
                         android:hint="Mobile Number"
                         android:textColorHint="@color/white"
                         android:inputType="phone"

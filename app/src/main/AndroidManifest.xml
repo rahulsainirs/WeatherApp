@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.rahulcodecamp.weatherapp">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -12,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherApp">
         <activity android:name=".ProfileActivity"></activity>
-        <activity android:name=".TodayWeather" />
+        <activity android:name=".TodayWeatherActivity" />
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

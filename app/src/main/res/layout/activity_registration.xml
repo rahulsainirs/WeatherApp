@@ -7,13 +7,25 @@
     tools:context=".RegistrationActivity">
 
     <include
-        android:id="@+id/toolbar_1"
-        layout="@layout/toolbar_1"/>
+        android:id="@+id/toolbar_view"
+        layout="@layout/toolbar_view"/>
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/progress"
+        style="@style/SpinKitView.Large.Circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:elevation="12dp"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        app:SpinKit_Color="@color/teal_200" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar_1"
+        android:layout_below="@+id/toolbar_view"
         android:layout_centerInParent="true"
         android:orientation="vertical">
         <ScrollView

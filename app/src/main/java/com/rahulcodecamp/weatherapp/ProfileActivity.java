@@ -4,15 +4,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.rahulcodecamp.weatherapp.utility.NetworkChangeListener;
+
 public class ProfileActivity extends AppCompatActivity {
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener(); // to check internetConnection
 
     String phoneNo;
-
     TextView profileTextView;
 
     DBHelper db;
@@ -22,9 +28,9 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-
-        Toolbar toolbar = findViewById(R.id.toolbar_1);
+        Toolbar toolbar = findViewById(R.id.toolbar_view);
         toolbar.setTitle("User Profile");
+        toolbar.setNavigationIcon(R.drawable.ic_close);
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
@@ -37,6 +43,12 @@ public class ProfileActivity extends AppCompatActivity {
         searchingData();
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
+    }
+
     public void searchingData(){
         Cursor result = db.getUserData(phoneNo);
 
@@ -44,5 +56,18 @@ public class ProfileActivity extends AppCompatActivity {
             profileTextView.setText("Name : "+result.getString(1)+ "\n" + "Gender : "+result.getString(2)+"\n"+"Age : "
             +result.getString(3)+"\n"+"Address : "+result.getString(4)+ "\n" + "District : "+result.getString(5)+"\n" +"PinCode : "+result.getString(6));
         }
+    }
+
+    @Override
+    protected void onStart() {
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 }

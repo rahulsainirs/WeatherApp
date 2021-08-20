@@ -6,8 +6,11 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,8 +19,14 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
+import com.github.ybq.android.spinkit.style.ThreeBounce;
+import com.rahulcodecamp.weatherapp.utility.NetworkChangeListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,9 +38,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.Objects;
 
-public class TodayWeather extends AppCompatActivity {
+public class TodayWeatherActivity extends AppCompatActivity {
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener(); // to check internetConnection
+
+    ProgressBar progressBar;
 
     String userPhoneNo;
 
@@ -45,8 +56,13 @@ public class TodayWeather extends AppCompatActivity {
         DownloadTask task = new DownloadTask();
 
         String city = cityEditText.getText().toString().toLowerCase().trim();
-        task.execute("http://api.openweathermap.org/data/2.5/weather?q="+city+"&lang=en&appid=146952e5d828e5e5cf57ce6c586a9ff2");
-
+        if (TextUtils.isEmpty(city)){
+            cityEditText.setError("please enter City/District first");
+        }
+        else {
+            progressBar.setVisibility(View.VISIBLE);
+            task.execute("http://api.openweathermap.org/data/2.5/weather?q="+city+"&lang=en&appid=146952e5d828e5e5cf57ce6c586a9ff2");
+        }
     }
 
     public class DownloadTask extends AsyncTask<String, Void, String> {
@@ -110,18 +126,20 @@ public class TodayWeather extends AppCompatActivity {
                     mainTextView.setText(main);
 
                     if (main.equals("")){
-                        Toast.makeText(TodayWeather.this, "city isn't found", Toast.LENGTH_SHORT).show();;
+                        Toast.makeText(TodayWeatherActivity.this, "city isn't found", Toast.LENGTH_SHORT).show();;
                     }
                 }
                 if (!message.equals("")){
+                    progressBar.setVisibility(View.GONE);
                     weatherInfoTextView.setText(message);
                 }
                 else {
-                    Toast.makeText(TodayWeather.this, "city isn't found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TodayWeatherActivity.this, "city isn't found", Toast.LENGTH_SHORT).show();
                 }
 
             } catch (Exception e) {
-                Toast.makeText(TodayWeather.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(TodayWeatherActivity.this, "Sorry data isn't available in API\n\n\t->"+e.getMessage(), Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
 
@@ -162,10 +180,14 @@ public class TodayWeather extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_today_weather);
 
+        progressBar = (ProgressBar)findViewById(R.id.progress);
+        Sprite threeBounce = new ThreeBounce();
+        progressBar.setIndeterminateDrawable(threeBounce);
+
         Intent intent = getIntent();
         userPhoneNo = intent.getStringExtra("user'sPhoneNo");
 
-        Toolbar toolbar = findViewById(R.id.toolbar_1); // custom toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar_view); // custom toolbar
         setSupportActionBar(toolbar);
 
         mainTextView = findViewById(R.id.mainTextView);
@@ -878,7 +900,7 @@ public class TodayWeather extends AppCompatActivity {
 
         switch (item.getItemId()){
             case (R.id.logoutBtn):
-                Dialog dialog = new Dialog(TodayWeather.this,R.style.Dialog);
+                Dialog dialog = new Dialog(TodayWeatherActivity.this,R.style.Dialog);
                 dialog.setContentView(R.layout.logout_dialog_layout);
                 Button yesButton, noButton;
                 yesButton = dialog.findViewById(R.id.yesButton);
@@ -888,7 +910,7 @@ public class TodayWeather extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                     //    signOut();
-                        startActivity(new Intent(TodayWeather.this, MainActivity.class));
+                        startActivity(new Intent(TodayWeatherActivity.this, MainActivity.class));
                     }
                 });
                 noButton.setOnClickListener(new View.OnClickListener() {
@@ -900,7 +922,7 @@ public class TodayWeather extends AppCompatActivity {
                 dialog.show();
                 break;
             case (R.id.profileBtn):
-                Intent intent = new Intent(TodayWeather.this, ProfileActivity.class);
+                Intent intent = new Intent(TodayWeatherActivity.this, ProfileActivity.class);
                 intent.putExtra("user'sPhoneNo", userPhoneNo);
                 startActivity(intent);
                 break;
@@ -908,4 +930,18 @@ public class TodayWeather extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onStart() {
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
+    }
+
 }
