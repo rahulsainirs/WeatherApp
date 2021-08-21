@@ -2,18 +2,13 @@ package com.rahulcodecamp.weatherapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -27,8 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.ybq.android.spinkit.sprite.Sprite;
-import com.github.ybq.android.spinkit.style.ChasingDots;
-import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.github.ybq.android.spinkit.style.WanderingCubes;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -50,7 +43,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     ProgressBar progressBar;
 
-    TextInputLayout dobTextInputLayout, pinCodeTextInputLayout;
+    TextInputLayout phoneTextInputLayout, dobTextInputLayout, pinCodeTextInputLayout;
     TextInputEditText dobTextInputEditText, pinCodeTextInputEditText, phoneTextInputEditText,
             nameTextInputEditText, addressLine1TextInputEditText, addressLine2TextInputEditText;
 
@@ -65,11 +58,11 @@ public class RegistrationActivity extends AppCompatActivity {
     String district;
     int age;
     String userPhoneNo;
-
+    String dobRegex = "(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((?:19|20)[0-9][0-9])";
     public void checkClicked(View view) {
 
         if (pinCodeTextInputEditText.getText().length() < 6) {
-            pinCodeTextInputEditText.setError("Please enter valid digits");
+            pinCodeTextInputEditText.setError("Please enter valid digits\npincode should contain 6 digits");
         } else if (pinCodeTextInputEditText.getText().equals("")) {
             pinCodeTextInputEditText.setError("Please enter valid digits");
         } else {
@@ -79,7 +72,6 @@ public class RegistrationActivity extends AppCompatActivity {
             String PINCODE = pinCodeTextInputEditText.getText().toString();
             task.execute("https://api.postalpincode.in/pincode/" + PINCODE);
         }
-
 
     }
 
@@ -162,7 +154,7 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-        progressBar = (ProgressBar) findViewById(R.id.progress);
+        progressBar = findViewById(R.id.progress);
         Sprite wanderingCubes = new WanderingCubes();
         progressBar.setIndeterminateDrawable(wanderingCubes);
 
@@ -185,6 +177,8 @@ public class RegistrationActivity extends AppCompatActivity {
         nameTextInputEditText = findViewById(R.id.nameTextInputEditText);
 
         pinCodeTextInputLayout = findViewById(R.id.pinCodeTextInputLayout);
+        phoneTextInputLayout = findViewById(R.id.phoneTextInputLayout);
+
         pinCodeTextInputEditText = findViewById(R.id.pinCodeTextInputEditText);
         stateTextView = findViewById(R.id.stateTextView);
         districtTextView = findViewById(R.id.districtTextView);
@@ -246,9 +240,8 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-
                     String phoneNo = phoneTextInputEditText.getText().toString().trim();
-                    String name = nameTextInputEditText.getText().toString().trim();
+                    String name = nameTextInputEditText.getText().toString().toUpperCase().trim();
                     String gender = genderAutoCompleteTextView.getText().toString().trim();
                     String dob = dobTextInputEditText.getText().toString().trim();
                     String addressLine1 = addressLine1TextInputEditText.getText().toString().trim();
@@ -258,7 +251,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
                     if (TextUtils.isEmpty(phoneNo) || phoneNo.length() <= 9) {
 
-                        phoneTextInputEditText.setError("please enter phone number");
+                        phoneTextInputEditText.setError("please enter 10 digits phone number");
                     } else if (TextUtils.isEmpty(name)) {
 
                         nameTextInputEditText.setError("please enter Your full name");
@@ -267,11 +260,13 @@ public class RegistrationActivity extends AppCompatActivity {
                         genderAutoCompleteTextView.setError("please select the gender");
                     } else if (TextUtils.isEmpty(dob)) {
 
-                        Toast.makeText(RegistrationActivity.this, "please fill date of birth", Toast.LENGTH_SHORT).show();
-                    } else if (TextUtils.isEmpty(addressLine1) || addressLine1.length() <= 3) {
+                        Toast.makeText(RegistrationActivity.this, "please fill date of birth\nusing date picker", Toast.LENGTH_SHORT).show();
+                    }else if (!dob.matches(dobRegex)) {
+                        dobTextInputEditText.setError("DOB should be in dd/mm/yyyy format");
 
-                        Toast.makeText(RegistrationActivity.this, "Address line1 must be above 3 characters", Toast.LENGTH_SHORT).show();
-                        addressLine1TextInputEditText.setError("please fill Address line 1");
+                    } else if (TextUtils.isEmpty(addressLine1) || addressLine1.length() <= 2) {
+
+                        addressLine1TextInputEditText.setError("Please fill Address line 1\nIt must be above 3 characters");
                     } else if (TextUtils.isEmpty(addressLine2)) {
 
                         addressLine2TextInputEditText.setError("please fill Address line 2");
@@ -279,7 +274,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
                         pinCodeTextInputEditText.setError("please enter Your pincode");
                     } else if (district.length() <= 1) {
-                        pinCodeTextInputEditText.setError("Please click on check button");
+                        pinCodeTextInputEditText.setError("Please click on check button and fetch data");
                         Toast.makeText(RegistrationActivity.this, "Please click on check button after filling pinCode", Toast.LENGTH_SHORT).show();
                     } else {
                         startActivity(new Intent(RegistrationActivity.this, TodayWeatherActivity.class));
@@ -295,13 +290,15 @@ public class RegistrationActivity extends AppCompatActivity {
                                 finish();
                             } else {
                                 Toast.makeText(RegistrationActivity.this, "Registration failed...", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
+                                finish();
                             }
                         } else {
                             Toast.makeText(RegistrationActivity.this, "This phone number is already registered! please try another one", Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception e) {
-                    Toast.makeText(RegistrationActivity.this, "Please first click on check button to fetch the data" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegistrationActivity.this, "Please first click on check button to fetch the data\n\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

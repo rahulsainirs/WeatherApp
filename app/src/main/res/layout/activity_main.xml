@@ -7,10 +7,6 @@
     android:background="@color/purple_200"
     tools:context=".MainActivity">
 
-    <include
-        android:id="@+id/toolbar_view"
-        layout="@layout/toolbar_view"/>
-
     <com.airbnb.lottie.LottieAnimationView
     android:id="@+id/signupBackground"
     android:layout_width="match_parent"
@@ -25,16 +21,19 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_centerInParent="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="10dp">
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="match_parent"
@@ -55,13 +54,11 @@
                     app:lottie_rawRes="@raw/loginprofile"/>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout2"
+                    android:id="@+id/phoneTextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:counterEnabled="true"
                     app:counterMaxLength="10"
-                    app:prefixText="+91"
-                    app:prefixTextAppearance="@color/black"
                     app:counterTextColor="@color/white"
                     app:endIconMode="clear_text"
                     app:startIconDrawable="@drawable/ic_phone">

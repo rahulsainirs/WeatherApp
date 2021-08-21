@@ -6,13 +6,9 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
-
 import com.rahulcodecamp.weatherapp.utility.NetworkChangeListener;
 
 public class ProfileActivity extends AppCompatActivity {

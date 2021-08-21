@@ -24,7 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.ybq.android.spinkit.sprite.Sprite;
-import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.github.ybq.android.spinkit.style.ThreeBounce;
 import com.rahulcodecamp.weatherapp.utility.NetworkChangeListener;
 
@@ -51,6 +50,7 @@ public class TodayWeatherActivity extends AppCompatActivity {
     ImageView weatherWidgetImageView;
 
     DecimalFormat df =new DecimalFormat("#.##");
+    long back_pressed;
 
     public void getWeather(View view){
         DownloadTask task = new DownloadTask();
@@ -180,7 +180,7 @@ public class TodayWeatherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_today_weather);
 
-        progressBar = (ProgressBar)findViewById(R.id.progress);
+        progressBar = findViewById(R.id.progress);
         Sprite threeBounce = new ThreeBounce();
         progressBar.setIndeterminateDrawable(threeBounce);
 
@@ -942,6 +942,19 @@ public class TodayWeatherActivity extends AppCompatActivity {
     protected void onStop() {
         unregisterReceiver(networkChangeListener);
         super.onStop();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (back_pressed + 1000 > System.currentTimeMillis()){
+            this.moveTaskToBack(true);   // this line is used to minimize app not to exit
+        }
+        else{
+            Toast.makeText(getBaseContext(),
+                    "Double tap to minimize!", Toast.LENGTH_SHORT)
+                    .show();
+        }
+        back_pressed = System.currentTimeMillis();
     }
 
 }

@@ -12,9 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherApp">
-        <activity android:name=".ProfileActivity"></activity>
-        <activity android:name=".TodayWeatherActivity" />
-        <activity android:name=".RegistrationActivity" />
+        <activity android:name=".ProfileActivity"></activity>  // i have used configChanges so that data couldnt be lost while we change screenSize/orrientation
+        <activity android:name=".TodayWeatherActivity" android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize" />
+        <activity android:name=".RegistrationActivity" android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

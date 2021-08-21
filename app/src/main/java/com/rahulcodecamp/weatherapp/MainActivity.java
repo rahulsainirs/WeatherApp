@@ -1,7 +1,6 @@
 package com.rahulcodecamp.weatherapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -9,7 +8,6 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -31,12 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
         db = new DBHelper(this); // SQLITE DB
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // this will remove the statusBar
-
-        Toolbar toolbar = findViewById(R.id.toolbar_view);
-        toolbar.setTitle("WeatherApp");
-        setSupportActionBar(toolbar);
-
     }
 
     public void goToRegBtnClicked(View v){
@@ -44,8 +36,7 @@ public class MainActivity extends AppCompatActivity {
         phoneNo = phoneTextInputEditText.getText().toString().trim();
 
         if (TextUtils.isEmpty(phoneNo) || phoneNo.length() <=9){
-            phoneTextInputEditText.setError("Please enter phone number");
-            Toast.makeText(this, "Please enter phone number first", Toast.LENGTH_SHORT).show();
+            phoneTextInputEditText.setError("Please enter 10 digits phone number");
         }
         else {
             Intent intent = new Intent(MainActivity.this, RegistrationActivity.class);
@@ -55,11 +46,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loginBtnClicked(View v){
-
         phoneNo = phoneTextInputEditText.getText().toString().trim();
 
-        if (TextUtils.isEmpty(phoneNo) || phoneNo.length() <=9){
-            phoneTextInputEditText.setError("Please enter phone number");
+        if (TextUtils.isEmpty(phoneNo) || phoneNo.length() <10){
+            phoneTextInputEditText.setError("Please enter 10 digits phone number");
         }
         else {
             Boolean checkPhoneNo = db.checkPhoneNo(phoneNo);
